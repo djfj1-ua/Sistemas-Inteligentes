@@ -1,7 +1,9 @@
 import sys, pygame
 from casilla import *
 from mapa import *
+from funciones import *
 from pygame.locals import *
+from nodo import *
 
 
 MARGEN=5
@@ -97,8 +99,8 @@ def main():
     coste=-1
     cal=0
     running= True    
-    origen=Casilla(-1,-1)
-    destino=Casilla(-1,-1)
+    origen=Casilla(-1,-1) #Casilla del conejo
+    destino=Casilla(-1,-1) #Casilla de la zanahoria
     
     while running:        
         #procesamiento de eventos
@@ -114,7 +116,8 @@ def main():
                         camino=inic(mapi)
                         if pulsaBoton(mapi, pos)==1:
                             ###########################                                                 
-                            #coste, cal=llamar a A estrella             
+                            #coste, cal=llamar a A estrella
+                            comprobar(mapi, origen, coste, cal, destino)
                             if coste==-1:
                                 print('Error: No existe un camino válido entre origen y destino')
                         else:
