@@ -14,8 +14,21 @@ cos = [("normal",1), ("diagonal",1.5)]
 
 esfuerzo = [("hierba",2),("agua",4),("roca",6)]
 
+def calculoVecino(mapi, n, destino):
+    vecinos = []
 
-def comprobar(mapi, origen, coste, cal, destino):
+    vecinos.append(Nodo(n,Casilla(n.posicion.getCol() + 1,n.posicion.getFila()),1,destino))#Derecha
+    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() - 1, n.posicion.getFila()),1,destino))#Izquierda
+    vecinos.append(Nodo(n, Casilla(n.posicion.getCol(), n.posicion.getFila() - 1),1,destino))#Arriba
+    vecinos.append(Nodo(n, Casilla(n.posicion.getCol(), n.posicion.getFila() + 1),1,destino))#Abajo
+    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() - 1, n.posicion.getFila() - 1),1.5,destino))#IzqArriba
+    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() + 1, n.posicion.getFila() - 1),1.5,destino))#DerArriba
+    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() - 1, n.posicion.getFila() + 1),1.5,destino))#IzqAbajo
+    vecinos.append(Nodo(n,Casilla(n.posicion.getCol() + 1, n.posicion.getFila() + 1),1.5,destino))#DerAbajo
+
+    return vecinos
+
+def aestrella(mapi, origen, coste, cal, destino, camino):
 
     nodo_inicio = Nodo(None, origen, None, destino)
     nodo_inicio.g = 0
@@ -29,8 +42,28 @@ def comprobar(mapi, origen, coste, cal, destino):
 
     listaFrontera = []
     listaInterior = []
+    camino = []
 
     listaFrontera.append(nodo_inicio)
 
     while listaFrontera:
-        n = sorted(listaFrontera, key=lambda nodo:nodo.f)
+        laux = sorted(listaFrontera, key=lambda nodo:nodo.f)
+        n = laux[0]
+        nodo_inicio = n
+
+        if n.posicion.getCol() == destino.getCol() and n.posicion.getFila() == destino.getFila():
+            while n.padre is not None:
+                n = n.padre
+            break
+        else:
+            listaFrontera.remove(n)
+            listaInterior.append(n)
+
+            m = calculoVecino(mapi, n, destino)
+
+            for vecino in m:
+                vecino.g = n.g + vecino.g
+
+                if vecino not in listaFrontera:
+
+

@@ -14,7 +14,7 @@ HIERBA=(250, 180, 160)
 MURO=(30, 70, 140)
 AGUA=(173, 216, 230) 
 ROCA=(110, 75, 48)
-AMARILLO=(120, 60, 50) 
+AMARILLO=(255, 255, 0)
 
 # ---------------------------------------------------------------------
 # Funciones
@@ -117,7 +117,7 @@ def main():
                         if pulsaBoton(mapi, pos)==1:
                             ###########################                                                 
                             #coste, cal=llamar a A estrella
-                            comprobar(mapi, origen, coste, cal, destino)
+                            aestrella(mapi, origen, coste, cal, destino, camino)
                             if coste==-1:
                                 print('Error: No existe un camino válido entre origen y destino')
                         else:
