@@ -17,7 +17,7 @@ class Nodo():
         return self.posicion.getCol() == other.posicion.getCol() and self.posicion.getFila() == other.posicion.getFila()
 
     def __str__(self):
-        padre_pos = f'({self.padre.posicion.getFila()}, {self.padre.posicion.getCol()})' if self.padre else 'Ninguno'
+        padre_pos = f'(Fila:{self.padre.posicion.getFila()}, Columna{self.padre.posicion.getCol()})' if self.padre else 'Ninguno'
         return (f'Posición: ({self.posicion.getFila()}, {self.posicion.getCol()})\n'
                 f'G: {self.g}\n'
                 f'H: {self.h}\n'

@@ -14,18 +14,20 @@ cos = [("normal",1), ("diagonal",1.5)]
 
 esfuerzo = [("hierba",2),("agua",4),("roca",6)]
 
-def calculoVecino(mapi, n, destino):#Tengo que hacer esto para que no pise las casillas de muro
+def calculoVecino(mapi, n, destino):#Tengo que hacer esto para que no pise las casillas de muro -> #
     vecinos = []
 
-    vecinos.append(Nodo(n,Casilla(n.posicion.getCol() + 1,n.posicion.getFila()),1,destino))#Derecha
-    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() - 1, n.posicion.getFila()),1,destino))#Izquierda
-    vecinos.append(Nodo(n, Casilla(n.posicion.getCol(), n.posicion.getFila() - 1),1,destino))#Arriba
-    vecinos.append(Nodo(n, Casilla(n.posicion.getCol(), n.posicion.getFila() + 1),1,destino))#Abajo
-    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() - 1, n.posicion.getFila() - 1),1.5,destino))#IzqArriba
-    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() + 1, n.posicion.getFila() - 1),1.5,destino))#DerArriba
-    vecinos.append(Nodo(n, Casilla(n.posicion.getCol() - 1, n.posicion.getFila() + 1),1.5,destino))#IzqAbajo
-    vecinos.append(Nodo(n,Casilla(n.posicion.getCol() + 1, n.posicion.getFila() + 1),1.5,destino))#DerAbajo
-    vecinos.append(Nodo(n, Casilla(n.posicion.getCol(), n.posicion.getFila()), 1.5, destino))#El mismo
+    #Calcular los vecinos teniendo en cuenta los muros y que se salga de la cuadricula
+    for i in range(-1,2):
+        for j in range(-1,2):
+            coordX = n.posicion.getFila() + i
+            coordY = n.posicion.getCol() + j
+            res = mapi.getCelda(coordX, coordY)
+            if mapi.getCelda(coordX,coordY) != 1 and (mapi.getAncho() - 1 != coordX and mapi.getAlto() - 1 != coordY):#Mirar lo de out of range
+                if i != 0 and j != 0:
+                    vecinos.append(Nodo(n,Casilla(coordX,coordY),1.5,destino))
+                else:
+                    vecinos.append(Nodo(n,Casilla(coordX,coordY),1,destino))
 
     return vecinos
 
@@ -55,7 +57,6 @@ def aestrella(mapi, origen, cal, destino, camino):
             camAux = []
             while actual:
                 camino[actual.posicion.getCol()][actual.posicion.getFila()] = 'c'
-                camAux.append(Casilla(actual.posicion.getFila(),actual.posicion.getCol()))
                 actual = actual.padre
             return n.f
         else:
