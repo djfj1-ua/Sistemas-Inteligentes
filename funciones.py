@@ -14,7 +14,7 @@ cos = [("normal",1), ("diagonal",1.5)]
 
 esfuerzo = [("hierba",2),("agua",4),("roca",6)]
 
-def calculoVecino(mapi, n, destino):
+def calculoVecino(mapi, n, destino):#Tengo que hacer esto para que no pise las casillas de muro
     vecinos = []
 
     vecinos.append(Nodo(n,Casilla(n.posicion.getCol() + 1,n.posicion.getFila()),1,destino))#Derecha
@@ -25,10 +25,11 @@ def calculoVecino(mapi, n, destino):
     vecinos.append(Nodo(n, Casilla(n.posicion.getCol() + 1, n.posicion.getFila() - 1),1.5,destino))#DerArriba
     vecinos.append(Nodo(n, Casilla(n.posicion.getCol() - 1, n.posicion.getFila() + 1),1.5,destino))#IzqAbajo
     vecinos.append(Nodo(n,Casilla(n.posicion.getCol() + 1, n.posicion.getFila() + 1),1.5,destino))#DerAbajo
+    vecinos.append(Nodo(n, Casilla(n.posicion.getCol(), n.posicion.getFila()), 1.5, destino))#El mismo
 
     return vecinos
 
-def aestrella(mapi, origen, coste, cal, destino, camino):
+def aestrella(mapi, origen, cal, destino, camino):
 
     nodo_inicio = Nodo(None, origen, None, destino)
     nodo_inicio.g = 0
@@ -40,30 +41,42 @@ def aestrella(mapi, origen, coste, cal, destino, camino):
     nodo_final.h = 0
     nodo_final.f = 0
 
-    listaFrontera = []
-    listaInterior = []
-    camino = []
+    listaFrontera = []#Nodos no explorados
+    listaInterior = []#Nodos explorados
 
     listaFrontera.append(nodo_inicio)
 
     while listaFrontera:
-        laux = sorted(listaFrontera, key=lambda nodo:nodo.f)
-        n = laux[0]
-        nodo_inicio = n
+        listaFrontera = sorted(listaFrontera, key=lambda nodo:nodo.f)
+        n = listaFrontera[0]
 
         if n.posicion.getCol() == destino.getCol() and n.posicion.getFila() == destino.getFila():
-            while n.padre is not None:
-                n = n.padre
-            break
+            actual = n
+            camAux = []
+            while actual:
+                camino[actual.posicion.getCol()][actual.posicion.getFila()] = 'c'
+                camAux.append(Casilla(actual.posicion.getFila(),actual.posicion.getCol()))
+                actual = actual.padre
+            return n.f
         else:
-            listaFrontera.remove(n)
+
+            for x in listaFrontera:
+                if n.posicion.getCol() == x.posicion.getCol() and n.posicion.getFila() == x.posicion.getFila():
+                    listaFrontera.pop(0)
+                    break
+
             listaInterior.append(n)
 
-            m = calculoVecino(mapi, n, destino)
+            vecinos = calculoVecino(mapi, n, destino)
 
-            for vecino in m:
-                vecino.g = n.g + vecino.g
-
-                if vecino not in listaFrontera:
-
+            for m in vecinos:
+                if m not in listaInterior:
+                    if m not in listaFrontera:
+                        listaFrontera.append(m)
+                    else:
+                        for l in listaFrontera:
+                            if (m.posicion.getCol() == l.posicion.getCol() and m.posicion.getFila() == l.posicion.getFila()) and m.f < l.f:
+                                m.padre = n
+                                listaFrontera[listaFrontera.index(l)] = m
+    print('Error, no se encuentra solucion')
 

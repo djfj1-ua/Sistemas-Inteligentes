@@ -9,3 +9,5 @@ class Casilla():
     def getCol (self):
         return self.col
         
+    def __str__(self):
+        return f"Casilla(fila: {self.fila}, columna: {self.col})"
