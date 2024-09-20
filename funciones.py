@@ -1,4 +1,4 @@
-import sys, pygame
+import sys, pygame, math
 from casilla import *
 from mapa import *
 from pygame.locals import *

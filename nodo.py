@@ -1,3 +1,5 @@
+import math
+
 class Nodo():
     def __init__(self, padre, posicion,g,destino):
         self.padre = padre
@@ -9,8 +11,25 @@ class Nodo():
         else:
             self.g = self.padre.g + g
 
+        desColumna = destino.getCol()
+        desFila = destino.getFila()
+        posColumna = posicion.getCol()
+        posFila = posicion.getFila()
+
         #Calculamos la h con Manhattan
-        self.h =abs(destino.getCol() - posicion.getCol()) + abs(destino.getFila() - posicion.getFila())
+        #self.h =abs(desColumna - posColumna) + abs(desFila - posFila)
+        #self.f = self.g + self.h
+
+        #Calculamos la h con euclídea
+        #self.h = math.sqrt(pow((desColumna - posColumna),2) + pow((desFila - posFila),2))
+        #self.f = self.g + self.h
+
+        # Fórmula de distancia octile
+        # Diferencias absolutas entre las coordenadas
+        dx = abs(desColumna - posColumna)
+        dy = abs(desFila - posFila)
+
+        self.h = min(dx, dy) * math.sqrt(2) + abs(dx - dy)
         self.f = self.g + self.h
 
         #Heuristica con h=0
