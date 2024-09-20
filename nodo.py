@@ -17,8 +17,8 @@ class Nodo():
         posFila = posicion.getFila()
 
         #Calculamos la h con Manhattan
-        #self.h =abs(desColumna - posColumna) + abs(desFila - posFila)
-        #self.f = self.g + self.h
+        self.h =abs(desColumna - posColumna) + abs(desFila - posFila)
+        self.f = self.g + self.h
 
         #Calculamos la h con euclídea
         #self.h = math.sqrt(pow((desColumna - posColumna),2) + pow((desFila - posFila),2))
@@ -26,11 +26,11 @@ class Nodo():
 
         # Fórmula de distancia octile
         # Diferencias absolutas entre las coordenadas
-        dx = abs(desColumna - posColumna)
-        dy = abs(desFila - posFila)
+        #dx = abs(desColumna - posColumna)
+        #dy = abs(desFila - posFila)
 
-        self.h = min(dx, dy) * math.sqrt(2) + abs(dx - dy)
-        self.f = self.g + self.h
+        #self.h = min(dx, dy) * math.sqrt(2) + abs(dx - dy)
+        #self.f = self.g + self.h
 
         #Heuristica con h=0
         #self.h = 0

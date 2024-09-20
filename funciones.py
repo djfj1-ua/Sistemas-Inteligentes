@@ -67,6 +67,8 @@ def aestrella(mapi, origen, destino, camino):
         if n.posicion.getCol() == destino.getCol() and n.posicion.getFila() == destino.getFila():#Si hemos llegado al destino
             actual = n
             calorias = 0
+            print(f'Número de nodos visitados -> {len(listaInterior)}')
+
             while actual.padre is not None:#Recompongo el camino y calculo las calorias
                 coordX = actual.posicion.getFila()
                 coordY = actual.posicion.getCol()
