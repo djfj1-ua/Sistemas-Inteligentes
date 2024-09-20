@@ -117,7 +117,7 @@ def main():
                         if pulsaBoton(mapi, pos)==1:
                             ###########################                                                 
                             #coste, cal=llamar a A estrella
-                            coste = aestrella(mapi, origen, cal, destino, camino)
+                            coste, cal = aestrella(mapi, origen, destino, camino)
                             if coste==-1:
                                 print('Error: No existe un camino válido entre origen y destino')
                         else:

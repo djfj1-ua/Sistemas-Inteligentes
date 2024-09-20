@@ -10,13 +10,17 @@ class Nodo():
             self.g = self.padre.g + g
 
         #Calculamos la h con Manhattan
-        self.h = 0#abs(destino.getCol() - posicion.getCol()) + abs(destino.getFila() - posicion.getFila())
+        self.h =abs(destino.getCol() - posicion.getCol()) + abs(destino.getFila() - posicion.getFila())
         self.f = self.g + self.h
+
+        #Heuristica con h=0
+        #self.h = 0
+        #self.f = self.g + self.h
 
     def __eq__(self, other):
         return self.posicion.getCol() == other.posicion.getCol() and self.posicion.getFila() == other.posicion.getFila()
 
-    def __str__(self):
+    def __str__(self):#Funcion creada con chatgpt
         padre_pos = f'(Fila:{self.padre.posicion.getFila()}, Columna{self.padre.posicion.getCol()})' if self.padre else 'Ninguno'
         return (f'Posición: ({self.posicion.getFila()}, {self.posicion.getCol()})\n'
                 f'G: {self.g}\n'
