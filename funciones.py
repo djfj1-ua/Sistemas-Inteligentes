@@ -1,8 +1,4 @@
-import sys, pygame, math
-from casilla import *
 from mapa import *
-from pygame.locals import *
-
 from nodo import Nodo
 
 # 0 -> hierba -> . -> 2
@@ -30,9 +26,9 @@ def calculoVecino(mapi, n, destino):#Tengo que hacer esto para que no pise las c
 
                 if res != 1:#Si no es un muro, almacenamos el nodo dependiendo de si es diagonal o no
                     if i != 0 and j != 0:#Diagonales valen 1.5
-                        vecinos.append(Nodo(n,Casilla(coordX,coordY),1.5,destino))
-                    else:#Las casillas en linea valen 1
-                        vecinos.append(Nodo(n,Casilla(coordX,coordY),1,destino))
+                        vecinos.append(Nodo(n,Casilla(coordX,coordY),1.5,destino,calculoCalorias(mapi,coordX,coordY)))
+                    else:#Las casillas rectas valen 1
+                        vecinos.append(Nodo(n,Casilla(coordX,coordY),1,destino,calculoCalorias(mapi,coordX,coordY)))
 
     return vecinos
 
@@ -50,7 +46,7 @@ def calculoCalorias(mapi, x, y):
 
 def aestrella(mapi, origen, destino, camino):
 
-    nodo_inicio = Nodo(None, origen, None, destino)
+    nodo_inicio = Nodo(None, origen, None, destino, 0)
     nodo_inicio.g = 0
     nodo_inicio.h = 0
     nodo_inicio.f = 0
@@ -95,3 +91,65 @@ def aestrella(mapi, origen, destino, camino):
                                 listaFrontera[listaFrontera.index(l)] = m#y cambiamos el nodo de la lista frontera por el actual
     return -1, 0
 
+def calculoFocal(frontera, eps, focal):
+
+    factor = (1 + eps)
+    Min = frontera[0].f#Elijo el primero porque la lista esta ordenada ascendientemente.
+
+    for actual in frontera:
+        if actual not in focal:
+            if actual.f >= (factor * Min):
+                focal.append(actual)
+
+    focal = sorted(focal, key=lambda nodo: nodo.cal)
+    return focal[0]
+
+
+def aestrellaEpsilon(mapi, origen, destino, camino, eps):
+
+    nodo_inicio = Nodo(None, origen, None, destino, 0)
+    nodo_inicio.g = 0
+    nodo_inicio.h = 0
+    nodo_inicio.f = 0
+
+    listaFrontera = []#Nodos no explorados
+    listaInterior = []#Nodos explorados
+    listaFocal = []#Segunda eurísitica
+
+    listaFrontera.append(nodo_inicio)
+
+    while listaFrontera:#Mientras queden nodos en la lista frontera
+        listaFrontera = sorted(listaFrontera, key=lambda nodo:nodo.f)#Ordeno la lista frontera descendentemente segun f
+        n = calculoFocal(listaFrontera, eps, listaFocal)#Calculo de la lista focal y escojo el que tenga menor costo de calorias para nodo actual
+
+        if n.posicion.getCol() == destino.getCol() and n.posicion.getFila() == destino.getFila():#Si hemos llegado al destino
+            actual = n
+            calorias = 0
+            print(f'Número de nodos visitados -> {len(listaInterior)}')
+
+            while actual.padre is not None:#Recompongo el camino y calculo las calorias
+                coordX = actual.posicion.getFila()
+                coordY = actual.posicion.getCol()
+                calorias += calculoCalorias(mapi,coordX,coordY)
+                camino[coordX][coordY] = 'c'
+                actual = actual.padre
+            return n.f, calorias#Devuelvo el coste total
+        else:#Si no es la casilla destino
+
+            listaFocal.remove(n)#Quito el nodo actual de la lista focal
+            listaFrontera.remove(n)#Quito el nodo actual de la lista frontera
+            listaInterior.append(n)#Paso a explorar el nodo actual
+
+            vecinos = calculoVecino(mapi, n, destino)#Calculo los nodos vecinos del nodo actual
+
+            for m in vecinos:#Para todos los nodos vecinos
+                if m not in listaInterior:#Que no esten expandidos ya
+                    if m not in listaFrontera:#Si no lo hemos alcanzado aun, lo metemos en lista frontera
+                        listaFrontera.append(m)
+                    else:#Si ya lo hemos alcanzado anteriormente, calculamos el camino con menor coste entre el camino anterior y el actual
+                        for l in listaFrontera:
+                            #if (m.posicion.getCol() == l.posicion.getCol() and m.posicion.getFila() == l.posicion.getFila()) and m.f < l.f:#Si es la misma posicion y tiene un coste menor
+                            if (m == l) and m.f < l.f:
+                                m.padre = n#Cambiamos el padre por el nodo actual
+                                listaFrontera[listaFrontera.index(l)] = m#y cambiamos el nodo de la lista frontera por el actual
+    return -1, 0

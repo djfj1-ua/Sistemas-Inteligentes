@@ -1,16 +1,15 @@
-import math
-
-class Nodo():
-    def __init__(self, padre, posicion,g,destino):
+class Nodo:
+    def __init__(self, padre, posicion,g,destino,cal):
         self.padre = padre
         self.posicion = posicion
 
         #Calculamos g
         if self.padre is None:
             self.g = 0
+            self.cal = 0
         else:
             self.g = self.padre.g + g
-
+            self.cal = self.padre.cal + cal
         desColumna = destino.getCol()
         desFila = destino.getFila()
         posColumna = posicion.getCol()
@@ -45,4 +44,5 @@ class Nodo():
                 f'G: {self.g}\n'
                 f'H: {self.h}\n'
                 f'F: {self.f}\n'
+                f'Cal: {self.cal}'
                 f'Padre: {padre_pos}')
