@@ -126,18 +126,12 @@ def main():
                     else:
                         camino = inic(mapi)
                         if pulsaBoton(mapi, pos) == 1:
-                            arraynodos = []
-                            for i in range (1,5):
-                                coste, cal, numnodos = aestrella(mapi, origen, destino, camino, i)
-                                arraynodos.append((coste,cal,numnodos))
-                                print(f'Heuristica -> {i}: {numnodos}')
-                            i = 1
-                            for array in arraynodos:
-                                print(f'Heuristica {i}:\nCoste: {array[0]}  Calorias: {array[1]}    Numnodos: {array[2]}')
-                                i = i + 1
+                            print(f'---------------------------------------Algoritmo A estrella simple---------------------------------------')
+                            coste, cal = aestrella(mapi, origen, destino, camino, tipo_heuristica)
                             if coste == -1:
                                 print('Error: No existe un camino válido entre origen y destino')
                         else:
+                            print(f'---------------------------------------Algoritmo A estrella Epsilon---------------------------------------')
                             coste, cal = aestrellaEpsilon(mapi, origen, destino, camino, 0.5, tipo_heuristica)
                             if coste == -1:
                                 print('Error: No existe un camino válido entre origen y destino')

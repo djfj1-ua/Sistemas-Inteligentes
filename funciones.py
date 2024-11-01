@@ -108,7 +108,7 @@ def aestrella(mapi, origen, destino, camino, heuristica):
                 calorias += calculoCalorias(mapi, coordX, coordY)
                 camino[coordX][coordY] = 'c'
                 actual = actual.padre
-            return n.f, calorias, len(listaInterior)  # Devuelve el coste total
+            return n.f, calorias  # Devuelve el coste total
         else:  # Si no es el destino
             listaFrontera.remove(n)
             listaInterior.append(n)
