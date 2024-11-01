@@ -74,7 +74,7 @@ def calculoFocal(frontera, epsilon):
 def es_admisible(nodo_actual, destino):
     distancia_real = math.sqrt((destino.getCol() - nodo_actual.posicion.getCol())**2 + (destino.getFila() - nodo_actual.posicion.getFila())**2)
     if nodo_actual.h > distancia_real:
-        print(f'Nodo actual -> {nodo_actual.h}\nDistancia real -> {distancia_real}')
+        #print(f'Nodo actual -> {nodo_actual.h}\nDistancia real -> {distancia_real}')
         return False
     return True
 
@@ -92,9 +92,9 @@ def aestrella(mapi, origen, destino, camino, heuristica):
         listaFrontera = sorted(listaFrontera, key=lambda nodo: nodo.f)  # Ordeno la lista frontera
         n = listaFrontera[0]  # Nodo con menor f
 
-        if not es_admisible(n, destino):
+        #if not es_admisible(n, destino):
             # Opcional: detener el algoritmo si encuentra una heurística inadmisible
-            print("La heurística no es admisible.")
+            #print("La heurística no es admisible.")
 
         # Verificar si el nodo actual es el destino
         if n.posicion.getCol() == destino.getCol() and n.posicion.getFila() == destino.getFila():
@@ -108,7 +108,7 @@ def aestrella(mapi, origen, destino, camino, heuristica):
                 calorias += calculoCalorias(mapi, coordX, coordY)
                 camino[coordX][coordY] = 'c'
                 actual = actual.padre
-            return n.f, calorias  # Devuelve el coste total
+            return n.f, calorias, len(listaInterior)  # Devuelve el coste total
         else:  # Si no es el destino
             listaFrontera.remove(n)
             listaInterior.append(n)

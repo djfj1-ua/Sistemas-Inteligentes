@@ -126,7 +126,15 @@ def main():
                     else:
                         camino = inic(mapi)
                         if pulsaBoton(mapi, pos) == 1:
-                            coste, cal = aestrella(mapi, origen, destino, camino, tipo_heuristica)
+                            arraynodos = []
+                            for i in range (1,5):
+                                coste, cal, numnodos = aestrella(mapi, origen, destino, camino, i)
+                                arraynodos.append((coste,cal,numnodos))
+                                print(f'Heuristica -> {i}: {numnodos}')
+                            i = 1
+                            for array in arraynodos:
+                                print(f'Heuristica {i}:\nCoste: {array[0]}  Calorias: {array[1]}    Numnodos: {array[2]}')
+                                i = i + 1
                             if coste == -1:
                                 print('Error: No existe un camino válido entre origen y destino')
                         else:

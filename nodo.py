@@ -12,6 +12,7 @@ class Nodo:
         else:
             self.g = self.padre.g + g
             self.cal = self.padre.cal + cal
+
         desColumna = destino.getCol()
         desFila = destino.getFila()
         posColumna = posicion.getCol()
