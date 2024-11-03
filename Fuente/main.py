@@ -83,9 +83,9 @@ def main():
     reloj = pygame.time.Clock()
 
     if len(sys.argv) == 2:
-        file = 'mapa.txt'  # Usa mapa.txt por defecto
+        file = '../Mundos/mapa.txt'  # Usa mapa.txt por defecto
     else:
-        file = sys.argv[-1]
+        file = '../Mundos/' + sys.argv[-1]
 
     mapi = Mapa(file)
     camino = inic(mapi)
